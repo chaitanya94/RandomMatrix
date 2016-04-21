@@ -22,8 +22,8 @@
 ## Author: S Chaitanya Prasad <chaitanya@chaitanya-Inspiron-5537>
 ## Created: 2016-04-21
 
-function main ()
-  n = 100; # Number of times the Monte-Carlo simulationis run
+function main (n)
+  n = str2num(n); # Number of times the Monte-Carlo simulationis run
   uniform_count = [0 0 0 0 0]; # saddle stable-node unstable-node stable-spiral unstable-spiral
   normal_count = [0 0 0 0 0];
   exp_uniform = zeros(5, n); # To plot probability of all cases at each step
