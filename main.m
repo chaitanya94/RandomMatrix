@@ -1,27 +1,3 @@
-## Copyright (C) 2016 S Chaitanya Prasad
-## 
-## This program is free software; you can redistribute it and/or modify it
-## under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 3 of the License, or
-## (at your option) any later version.
-## 
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-## 
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-## -*- texinfo -*- 
-## @deftypefn {Function File} {@var{retval} =} main (@var{input1}, @var{input2})
-##
-## @seealso{}
-## @end deftypefn
-
-## Author: S Chaitanya Prasad <chaitanya@chaitanya-Inspiron-5537>
-## Created: 2016-04-21
-
 function main (n)
   n = str2num(n); # Number of times the Monte-Carlo simulationis run
   uniform_count = [0 0 0 0 0]; # saddle stable-node unstable-node stable-spiral unstable-spiral
@@ -29,6 +5,11 @@ function main (n)
   exp_uniform = zeros(5, n); # To plot probability of all cases at each step
   exp_normal = zeros(5, n); # To plot probability of all cases at each step
   
+  motion_x = zeros(1, n);
+  motion_y = zeros(1, n);
+  
+  motion_x(1) = 1;
+  motion_y(1) = 1;
   times = 1:1:n;
   for i = times
     #Uniform Random Variable
@@ -42,13 +23,19 @@ function main (n)
     [M] = matrix(X(1), X(2), X(3), X(4));
     [normal_count] = getCount(normal_count, M(1), M(2));
     exp_normal(:, i) = (normal_count/n)';
+    
+    #Phase plot for molecular motion - matrix - [X1 0; 0 X4]
+    
+    if i != 1
+      motion_x(i) = motion_x(i-1) * (X(1) + 1);
+      motion_y(i) = motion_y(i-1) * (X(4) + 1);
+    endif
   endfor
   
   disp("    Saddle Stable-node Unstable-node Stable-Spiral Unistable-sprial");
   disp(uniform_count/n);
   disp(normal_count/n);
-  
-  plot(times, exp_normal(2, :));
+  plot(motion_x, motion_y);
 endfunction
 
 function [X] = getUniform()
