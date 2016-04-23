@@ -5,11 +5,11 @@ function main (n)
   exp_uniform = zeros(5, n); # To plot probability of all cases at each step
   exp_normal = zeros(5, n); # To plot probability of all cases at each step
   
-  motion_x = zeros(1, n);
-  motion_y = zeros(1, n);
+  position = zeros(1, n);
   
-  motion_x(1) = 1;
-  motion_y(1) = 1;
+  C = 1;
+  m = 1;
+  position(1) = 1;
   times = 1:1:n;
   for i = times
     #Uniform Random Variable
@@ -25,17 +25,24 @@ function main (n)
     exp_normal(:, i) = (normal_count/n)';
     
     #Phase plot for molecular motion - matrix - [X1 0; 0 X4]
-    
-    if i != 1
-      motion_x(i) = motion_x(i-1) * (X(1) + 1);
-      motion_y(i) = motion_y(i-1) * (X(4) + 1);
+    if i > 1
+      [X] = getNormal();
+      k = C * X(1);
+      k = abs(k);
+      position(i) = position(i-1) * (1 - (k/m));
     endif
   endfor
   
   disp("    Saddle Stable-node Unstable-node Stable-Spiral Unistable-sprial");
   disp(uniform_count/n);
   disp(normal_count/n);
-  plot(motion_x, motion_y);
+  figure(1);
+  plot(times, position);
+  xlabel('Time');
+  ylabel('Position');
+  title('Position VS Time for oscillating mass');
+  grid on;
+  print figure1
 endfunction
 
 function [X] = getUniform()
